@@ -56,7 +56,7 @@ void show_list(list *head)
     struct list_head *node;
     list_for_each(node, &head->entry)
     {
-        printf("%s %d %f %f\n", container_of(node, list, entry)->prefix,
+        printf("%s\t%d\t%f\t%f\n", container_of(node, list, entry)->prefix,
                container_of(node, list, entry)->iCount,
                container_of(node, list, entry)->dSec,
                container_of(node, list, entry)->dSec /
