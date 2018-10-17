@@ -123,15 +123,18 @@ int main(int argc, char **argv)
             if (argc > 1 && strcmp(argv[1], "--bench") == 0)  // a for auto
                 goto quit;
 
-
             break;
         case 'f':
-            printf("find word in tree: ");
-            if (!fgets(word, sizeof word, stdin)) {
-                fprintf(stderr, "error: insufficient input.\n");
-                break;
+            if (argc == 4 && strcmp(argv[1], "--bench") == 0) {
+                strcpy(word, argv[3]);
+            } else {
+                printf("find word in tree: ");
+                if (!fgets(word, sizeof word, stdin)) {
+                    fprintf(stderr, "error: insufficient input.\n");
+                    break;
+                }
+                rmcrlf(word);
             }
-            rmcrlf(word);
             t1 = tvgetf();
 
             if (bloom_test(bloom, word) == 1) {
@@ -152,6 +155,8 @@ int main(int argc, char **argv)
                     printf("  ----------\n  %s not found by tree.\n", word);
             } else
                 printf("  %s not found by bloom filter.\n", word);
+            if (argc == 4 && strcmp(argv[1], "--bench") == 0)
+                goto quit;
             break;
         case 's':
             printf("find words matching prefix (at least 1 char): ");
