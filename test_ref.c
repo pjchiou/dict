@@ -68,6 +68,14 @@ int main(int argc, char **argv)
     fclose(fp);
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
+    FILE *output;
+    output = fopen("ref.txt", "a");
+    if (output != NULL) {
+        fprintf(output, "%.6f\n", t2 - t1);
+        fclose(output);
+    } else
+        printf("open file error\n");
+
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
         int stat = bench_test_bloom(root, "bench_ref.txt", bloom);
         tst_free(root);

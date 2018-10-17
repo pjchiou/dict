@@ -42,6 +42,7 @@ test_%: test_%.o $(OBJS_LIB)
 	$(Q)$(CC) -o $@ $(CFLAGS) -c -MMD -MF .$@.d $<
 
 test:  $(TESTS)
+	rm cpy.txt ref.txt;
 	echo 3 | sudo tee /proc/sys/vm/drop_caches;
 	perf stat --repeat 100 \
                 -e cache-misses,cache-references,instructions,cycles \
