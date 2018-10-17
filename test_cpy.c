@@ -4,12 +4,14 @@
 #include <time.h>
 
 #include "bench.c"
+#include "bloom.h"
 #include "tst.h"
 /** constants insert, delete, max word(s) & stack nodes */
 enum { INS, DEL, WRDMAX = 256, STKMAX = 512, LMAX = 1024 };
 #define REF INS
 #define CPY DEL
 
+#define TableSize 5000000 /* size of bloom filter */
 #define BENCH_TEST_FILE "bench_cpy.txt"
 
 /* simple trim '\n' from end of buffer filled by fgets */
@@ -39,12 +41,16 @@ int main(int argc, char **argv)
     }
 
     t1 = tvgetf();
+    bloom_t bloom = bloom_create(TableSize);
+
     while ((rtn = fscanf(fp, "%s", word)) != EOF) {
         char *p = word;
         if (!tst_ins_del(&root, &p, INS, CPY)) {
             fprintf(stderr, "error: memory exhausted, tst_insert.\n");
             fclose(fp);
             return 1;
+        } else {
+            bloom_add(bloom, p);
         }
         idx++;
     }
